@@ -17,7 +17,7 @@ options=()
 install=
 source=('vesktop-tray::git+https://github.com/NoahC500/vesktop-tray.git' 'vesktop.desktop' 'vesktop.sh')
 noextract=()
-sha256sums=('SKIP' '1fc38b41729f89c6075bc8d71e345597b1275ccc46973e48d059d7fa3cf41891' 'cbe7ee58fb9d04fbab2a2112e0ee4bd1c4810d4c22708ef83bcd4179fc528d94')
+sha256sums=('SKIP' 'SKIP' 'cbe7ee58fb9d04fbab2a2112e0ee4bd1c4810d4c22708ef83bcd4179fc528d94')
 
 prepare() {
   # Use system's electron
