@@ -1,6 +1,6 @@
 # Maintainer: Noah Craig <noahdcraig@outlook.com>
 pkgname=vesktop-custom-tray-git
-pkgver=v1.5.2.r59.gc038483
+pkgver=v1.5.2.r59.g3136b68
 pkgrel=1
 pkgdesc="Discord client with Vencord with system-tray customisability patch preinstalled, using system electron"
 arch=('x86_64')
@@ -17,7 +17,7 @@ options=()
 install=
 source=("$pkgname::git+https://github.com/Vencord/Vesktop.git" 'vesktop.desktop' 'vesktop.sh')
 noextract=()
-sha256sums=('SKIP' 'SKIP' 'cbe7ee58fb9d04fbab2a2112e0ee4bd1c4810d4c22708ef83bcd4179fc528d94')
+sha256sums=('SKIP' 'SKIP' '48f937289c2763396014835192cbd779a09187cc8682ed331636b99053f85b0e')
 
 pkgver() {
   cd "$pkgname"
@@ -44,7 +44,7 @@ package() {
   install -d "$pkgdir/usr/bin/${pkgname}"
 
   cp "$srcdir/$pkgname/dist/linux-unpacked/resources/app.asar" "$pkgdir/usr/lib/${pkgname}/"
-  install -Dm 755 "vesktop.sh" "$pkgdir/usr/bin/vesktop-tray"
+  install -Dm 755 "vesktop.sh" "$pkgdir/usr/bin/$pkgname"
 
   install -Dm 644 "vesktop.desktop" "$pkgdir/usr/share/applications/vesktop.desktop"
   install -Dm 644 "$srcdir/$pkgname/static/icon.png" "$pkgdir/usr/share/pixmaps/vesktop.png"
