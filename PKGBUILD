@@ -1,6 +1,6 @@
 # Maintainer: Noah Craig <noahdcraig@outlook.com>
 pkgname=vesktop-custom-tray-git
-pkgver=v1.5.2.r59.g3136b68
+pkgver=v1.5.2.r59.gc766037
 pkgrel=1
 pkgdesc="Discord client with Vencord with system-tray customisability patch preinstalled, using system electron"
 arch=('x86_64')
@@ -41,10 +41,9 @@ build() {
 
 package() {
   install -d "$pkgdir/usr/lib/${pkgname}"
-  install -d "$pkgdir/usr/bin/${pkgname}"
 
   cp "$srcdir/$pkgname/dist/linux-unpacked/resources/app.asar" "$pkgdir/usr/lib/${pkgname}/"
-  install -Dm 755 "vesktop.sh" "$pkgdir/usr/bin/$pkgname"
+  install -Dm 755 "vesktop.sh" "$pkgdir/usr/bin/vesktop"
 
   install -Dm 644 "vesktop.desktop" "$pkgdir/usr/share/applications/vesktop.desktop"
   install -Dm 644 "$srcdir/$pkgname/static/icon.png" "$pkgdir/usr/share/pixmaps/vesktop.png"
