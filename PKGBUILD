@@ -1,6 +1,6 @@
 # Maintainer: Noah Craig <noahdcraig@outlook.com>
-pkgname=vesktop-tray # '-bzr', '-git', '-hg' or '-svn'
-pkgver=1.5.2
+pkgname=vesktop-custom-tray-git
+pkgver=v1.5.2.r59.gc038483
 pkgrel=1
 pkgdesc="Discord client with Vencord with system-tray customisability patch preinstalled, using system electron"
 arch=('x86_64')
@@ -15,13 +15,18 @@ replaces=()
 backup=()
 options=()
 install=
-source=('vesktop-tray::git+https://github.com/Vencord/Vesktop.git' 'vesktop.desktop' 'vesktop.sh')
+source=("$pkgname::git+https://github.com/Vencord/Vesktop.git" 'vesktop.desktop' 'vesktop.sh')
 noextract=()
 sha256sums=('SKIP' 'SKIP' 'cbe7ee58fb9d04fbab2a2112e0ee4bd1c4810d4c22708ef83bcd4179fc528d94')
 
+pkgver() {
+  cd "$pkgname"
+  git describe --long --tags --abbrev=7 | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
+}
+
 prepare() {
   cd $srcdir/$pkgname/
-  tree
+  # Pull and merge patch
   git fetch origin pull/576/head:tray-patch
   git merge tray-patch -m "Merging new-tray branch into main"
   # Use system's electron
@@ -30,7 +35,6 @@ prepare() {
 
 build() {
   cd "$srcdir/$pkgname"
-
   COREPACK_ENABLE_STRICT=0 pnpm i
   COREPACK_ENABLE_STRICT=0 pnpm package:dir
 }
