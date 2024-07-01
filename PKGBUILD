@@ -8,18 +8,22 @@ url="https://github.com/Vencord/Vesktop"
 license=('GPL-3.0-or-later')
 groups=()
 depends=('electron29')
-makedepends=('git' 'pnpm') # 'bzr', 'git', 'mercurial' or 'subversion'
+makedepends=('git' 'pnpm')
 provides=('vesktop')
 conflicts=('vesktop' 'vesktop-bin' 'vesktop-git' 'vesktop_electron')
 replaces=()
 backup=()
 options=()
 install=
-source=('vesktop-tray::git+https://github.com/NoahC500/vesktop-tray.git' 'vesktop.desktop' 'vesktop.sh')
+source=('vesktop-tray::git+https://github.com/Vencord/Vesktop.git' 'vesktop.desktop' 'vesktop.sh')
 noextract=()
 sha256sums=('SKIP' 'SKIP' 'cbe7ee58fb9d04fbab2a2112e0ee4bd1c4810d4c22708ef83bcd4179fc528d94')
 
 prepare() {
+  cd $srcdir/$pkgname/
+  tree
+  git fetch origin pull/576/head:tray-patch
+  git merge tray-patch -m "Merging new-tray branch into main"
   # Use system's electron
   sed -i '/linux/s/^/        "electronDist": "\/usr\/lib\/electron29",\n/' "$srcdir/$pkgname/package.json"
 }
