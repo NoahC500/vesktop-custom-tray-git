@@ -1,6 +1,6 @@
 # Maintainer: Noah Craig <noahdcraig@outlook.com>
 pkgname=vesktop-custom-tray-git
-pkgver=v1.5.3.r36.g139cd24
+pkgver=v1.5.3.r92.g6cbd169
 pkgrel=1
 pkgdesc="Discord client with Vencord with system-tray customisability patch preinstalled, using system electron"
 arch=('x86_64')
@@ -15,9 +15,9 @@ replaces=()
 backup=()
 options=()
 install=
-source=("$pkgname::git+https://github.com/Vencord/Vesktop.git" 'vesktop.desktop' 'vesktop.sh' 'VesktopNative.ts')
+source=("$pkgname::git+https://github.com/Vencord/Vesktop.git" 'vesktop.desktop' 'vesktop.sh')
 noextract=()
-sha256sums=('SKIP' 'SKIP' '48f937289c2763396014835192cbd779a09187cc8682ed331636b99053f85b0e' 'SKIP')
+sha256sums=('SKIP' 'SKIP' '48f937289c2763396014835192cbd779a09187cc8682ed331636b99053f85b0e')
 
 pkgver() {
   cd "$pkgname"
@@ -27,15 +27,7 @@ pkgver() {
 prepare() {
   cd $srcdir/$pkgname/
   # Pull and merge patch
-  git fetch origin pull/576/head:tray-patch
-  git switch tray-patch
-  cp "$srcdir/VesktopNative.ts" "$srcdir/$pkgname/src/preload/VesktopNative.ts"
-  git add "$srcdir/$pkgname/src/preload/VesktopNative.ts"
-  git commit -a -m "To fix merge conflict"
-  git switch main
-  cp "$srcdir/VesktopNative.ts" "$srcdir/$pkgname/src/preload/VesktopNative.ts"
-  git add "$srcdir/$pkgname/src/preload/VesktopNative.ts"
-  git commit -a -m "To fix merge conflict"
+  git fetch origin pull/517/head:tray-patch
   git merge tray-patch -m "Merging new-tray branch into main"
   # Use system's electron
   sed -i '/linux/s/^/        "electronDist": "\/usr\/lib\/electron29",\n/' "$srcdir/$pkgname/package.json"
