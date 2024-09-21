@@ -1,23 +1,18 @@
 # Maintainer: Noah Craig <noahdcraig@outlook.com>
 pkgname=vesktop-custom-tray-git
-pkgver=v1.5.3.r92.g6cbd169
+pkgver=v1.5.3.r102.gb1c3aba
 pkgrel=1
 pkgdesc="Discord client with Vencord with system-tray customisability patch preinstalled, using system electron"
 arch=('x86_64')
 url="https://github.com/Vencord/Vesktop"
 license=('GPL-3.0-or-later')
 groups=()
-depends=('electron29')
+depends=('electron32')
 makedepends=('git' 'pnpm')
 provides=('vesktop')
 conflicts=('vesktop' 'vesktop-bin' 'vesktop-git' 'vesktop_electron')
-replaces=()
-backup=()
-options=()
-install=
-source=("$pkgname::git+https://github.com/Vencord/Vesktop.git" 'vesktop.desktop' 'vesktop.sh')
-noextract=()
-sha256sums=('SKIP' 'SKIP' '48f937289c2763396014835192cbd779a09187cc8682ed331636b99053f85b0e')
+source=("$pkgname::git+https://github.com/Vencord/Vesktop.git" 'https://raw.githubusercontent.com/Vencord/Vesktop/refs/heads/main/pnpm-lock.yaml' 'vesktop.desktop' 'vesktop.sh')
+sha256sums=('SKIP' 'SKIP' '831468f389793ad379bac4d100ebe2b604b93bb58510ae04c7493ad6a10b37f1' 'f22a064b874dcc08a225b343759e76b1ca7c232ba1bcc0b53d155aaf6b6e0817')
 
 pkgver() {
   cd "$pkgname"
@@ -25,18 +20,23 @@ pkgver() {
 }
 
 prepare() {
+# Pull and merge PR#517
   cd $srcdir/$pkgname/
-  # Pull and merge patch
   git fetch origin pull/517/head:tray-patch
+  git switch tray-patch
+  cp "$srcdir/pnpm-lock.yaml" "$srcdir/${pkgname}/"  # Overwrites PR's pnpm-lock with origin's (doesn't break anything in my experience)
+  git commit pnpm-lock.yaml -m "Using origin's pnpm-lock"
+  git switch main
   git merge tray-patch -m "Merging new-tray branch into main"
-  # Use system's electron
-  sed -i '/linux/s/^/        "electronDist": "\/usr\/lib\/electron29",\n/' "$srcdir/$pkgname/package.json"
+
+# Ensures the app's package.json has the correct Electron version (as of writing 32 is the default though)
+  sed -i '/linux/s/^/        "electronDist": "\/usr\/lib\/electron32",\n/' "$srcdir/$pkgname/package.json"
 }
 
 build() {
   cd "$srcdir/$pkgname"
-  COREPACK_ENABLE_STRICT=0 pnpm i
-  COREPACK_ENABLE_STRICT=0 pnpm package:dir
+  pnpm i
+  pnpm package:dir
 }
 
 package() {
