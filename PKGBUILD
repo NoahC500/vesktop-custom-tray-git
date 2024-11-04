@@ -1,6 +1,6 @@
 # Maintainer: Noah Craig <noahdcraig@outlook.com>
 pkgname=vesktop-custom-tray-git
-pkgver=v1.5.3.r102.gb1c3aba
+pkgver=v1.5.3.r109.g3163e1b
 pkgrel=1
 pkgdesc="Discord client with Vencord with system-tray customisability patch preinstalled, using system electron"
 arch=('x86_64')
@@ -23,10 +23,6 @@ prepare() {
 # Pull and merge PR#517
   cd $srcdir/$pkgname/
   git fetch origin pull/517/head:tray-patch
-  git switch tray-patch
-  cp "$srcdir/pnpm-lock.yaml" "$srcdir/${pkgname}/"  # Overwrites PR's pnpm-lock with origin's (doesn't break anything in my experience)
-  git commit pnpm-lock.yaml -m "Using origin's pnpm-lock"
-  git switch main
   git merge tray-patch -m "Merging new-tray branch into main"
 
 # Ensures the app's package.json has the correct Electron version (as of writing 32 is the default though)
